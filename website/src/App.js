@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "@emotion/styled";
 import "./App.css";
 
@@ -38,9 +39,31 @@ const Switch = styled.div`
 function App() {
   const [isOn, setIsOn] = useState(false);
 
+  let deviceIp = "https://172.20.10.2:3000";
   const toggleSwitch = () => {
     setIsOn(!isOn);
   };
+
+  async function turnOn() {
+    await axios.post(deviceIp + "/" + "on");
+  }
+
+  async function turnOff() {
+    await axios.post(deviceIp + "/" + "off");
+  }
+  async function getStatus() {
+    await axios.get(deviceIp + "/" + "status");
+  }
+
+  useEffect(() => {
+    if (isOn) {
+      turnOn();
+      console.log("turned on!");
+    } else {
+      turnOff();
+      console.log("turn off!");
+    }
+  }, [isOn]);
 
   return (
     <Container>
